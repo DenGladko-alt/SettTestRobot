@@ -14,7 +14,6 @@ namespace GoTween
         
         private bool _isPlaying = false;
         private float _lastTweenDelay = 0;
-        private float _duration = 0;
 
         public TweenSequence()
         {

@@ -1,6 +1,8 @@
+// The TweenManager is responsible for managing and updating all tweens and sequences.
+// It provides functionality to add, remove and update them.
+
 using UnityEngine;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 namespace GoTween
 {
@@ -10,6 +12,7 @@ namespace GoTween
         
         private static TweenManager _instance;
         
+        // TODO: Add pooling
         private List<TweenSequence> _sequencesList = new List<TweenSequence>();
         private List<Tween> _tweensList = new List<Tween>();
 

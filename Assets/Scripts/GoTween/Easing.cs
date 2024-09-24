@@ -1,3 +1,8 @@
+// The Easing class offers a collection of easing functions used in animations to create smooth transitions.
+// It includes methods like Linear, Sine, Quad, Cubic, Quart, Quint, Expo, Circ, Back, Elastic and Bounce.
+// Each with variations for different easing effects (In, Out, InOut).
+// Visual representation can be found here: https://easings.net/
+
 using System;
 using UnityEngine;
 
@@ -223,5 +228,7 @@ namespace GoTween
 		}
 
 		#endregion
+		
+		// TODO: Add custom curve evaluation
 	}
 }

@@ -8,7 +8,7 @@ using UnityEngine;
 namespace SettRobot
 {
     [RequireComponent(typeof(RobotController))]
-    public class RobotControllerDebugger : MonoBehaviour
+    public class RobotInstructionsDebugger : MonoBehaviour
     {
         [SerializeField] private bool showDebug = true;
     
@@ -32,28 +32,27 @@ namespace SettRobot
 
         private void OnDrawGizmos()
         {
-            if (!EditorApplication.isPlaying && showDebug)
+            if (EditorApplication.isPlaying || !showDebug) return;
+            
+            Vector3 startPosition = transform.position;
+            // Iterate through instructions and draw arrows/rotation indicators
+            foreach (RobotInstructionSO instruction in _instructions)
             {
-                Vector3 startPosition = transform.position;
-                // Iterate through instructions and draw arrows/rotation indicators
-                foreach (var instruction in _instructions)
+                foreach (TweenCommand tweenCommand in instruction.commands)
                 {
-                    foreach (var tweenCommand in instruction.commands)
+                    switch (tweenCommand.tweenType)
                     {
-                        if (tweenCommand.tweenType == TweenType.MoveTo)
-                        {
+                        case TweenType.MoveTo:
                             DrawArrow(startPosition, tweenCommand.value);
                             startPosition = tweenCommand.value;
-                        }
-                        else if (tweenCommand.tweenType == TweenType.MoveBy)
-                        {
+                            break;
+                        case TweenType.MoveBy:
                             DrawArrow(startPosition, startPosition + tweenCommand.value);
                             startPosition += tweenCommand.value;
-                        }
-                        else if (tweenCommand.tweenType is TweenType.RotateTo or TweenType.RotateBy)
-                        {
+                            break;
+                        case TweenType.RotateTo or TweenType.RotateBy:
                             DrawRotationIndicator(startPosition);
-                        }
+                            break;
                     }
                 }
             }
