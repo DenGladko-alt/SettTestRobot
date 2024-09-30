@@ -18,7 +18,7 @@ MonoBehaviour:
     duration: 2
     value: {x: 1, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - tweenType: 2
+  - tweenType: 3
     easeType: 0
     duration: 2
     value: {x: 90, y: 0, z: 0}

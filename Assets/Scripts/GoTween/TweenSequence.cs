@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace GoTween
@@ -13,7 +14,7 @@ namespace GoTween
         private float _elapsedTime = 0;
         
         private bool _isPlaying = false;
-        private float _lastTweenDelay = 0;
+        private float _totalSequenceDuration = 0;
 
         public TweenSequence()
         {
@@ -29,19 +30,39 @@ namespace GoTween
         {
             if (tween == null) return this;
             
+            tween.StartingSequenceDelay = _totalSequenceDuration;
+            _totalSequenceDuration += tween.Duration;
+            tween.EndingSequenceDelay = _totalSequenceDuration;
+            
+            AddTween(tween);
+
+            return this;
+        }
+
+        public TweenSequence Join(Tween tween)
+        {
+            if (tween == null) return this;
+            
+            tween.StartingSequenceDelay = _tweens.Any() ? _tweens.Last().StartingSequenceDelay : 0;
+            tween.EndingSequenceDelay = tween.StartingSequenceDelay + tween.Duration;
+
+            AddTween(tween);
+            
+            return this;
+        }
+        
+        private bool AddTween(Tween tween)
+        {
             if (TweenManager.Instance == null)
             {
-                throw new InvalidOperationException("TweenManager.Instance is null.");
+                Debug.LogError("TweenManager.Instance is null. Sequence cannot be added.");
+                return false;
             }
             
             _tweens.Add(tween);
             TweenManager.Instance.RemoveTween(tween);
             
-            tween.StartingSequenceDelay = _lastTweenDelay;
-            _lastTweenDelay += tween.Duration;
-            tween.EndingSequenceDelay = _lastTweenDelay;
-            
-            return this;
+            return true;
         }
 
         public TweenSequence Play()
@@ -80,7 +101,7 @@ namespace GoTween
                 }
             }
     
-            if (_elapsedTime > _lastTweenDelay)
+            if (_elapsedTime > _totalSequenceDuration)
             {
                 _isPlaying = false;
                 OnCompleteCallback?.Invoke();
@@ -104,7 +125,7 @@ namespace GoTween
         {
             _isPlaying = false;
             _elapsedTime = 0;
-            _lastTweenDelay = 0;
+            _totalSequenceDuration = 0;
             _tweens.Clear();
             return this;
         }

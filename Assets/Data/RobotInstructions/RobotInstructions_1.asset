@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RobotInstructions_1
   m_EditorClassIdentifier: 
   commands:
-  - tweenType: 2
+  - tweenType: 3
     easeType: 0
     duration: 2
     value: {x: 45, y: 45, z: 45}
